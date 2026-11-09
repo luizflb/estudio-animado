@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Conferência dos personagens: ?nomes=principal_svg,seguranca_svg&g=1 (g=1 mostra um gesto em cada um). Captura: chrome --headless=new --screenshot -->
+<style>html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#e9e5f3}</style>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="../../estilo.js"></script>
+<script src="rig2.js"></script><script src="pessoa_svg.js"></script>
+<script>
+  // cabeças vetorizadas que existirem (cabeca_<nome>.js) são carregadas pela lista abaixo, escrita pela etapa de personagem
+  window.CABECAS_LISTA = window.CABECAS_LISTA || [];
+</script>
+<script src="cabecas_lista.js" onerror="void 0"></script>
+<script src="pessoas_svg_def.js"></script>
+</head><body>
+<script>
+const q = new URLSearchParams(location.search);
+(window.CABECAS_LISTA || []).forEach(c => document.write(`<script src="cabeca_${c}.js"><\/script>`));
+</script>
+<script>
+const nomes = (q.get("nomes") || Object.keys(window.RIGS).join(",")).split(",").slice(0, 5);
+const tl = gsap.timeline({ paused: true });
+const gestos = ["acenar", "apontar", "joinha", "mao_aberta", "comemorar"];
+nomes.forEach((n, i) => {
+  const d = document.createElement("div"); d.style.cssText = `position:absolute;left:${(i + 0.5) * 1920 / nomes.length}px;top:600px`;
+  document.body.appendChild(d);
+  const p = Rig2.criar(d, n, { escala: 0.5, id: "p" + i }); p.iniciar(tl);
+  if (q.get("g")) { p.gesto(tl, 0.3, gestos[i % gestos.length], "d", 0); p.expressao(tl, 0.2, i % 2 ? "feliz" : "surpreso"); }
+});
+tl.seek(Number(q.get("t") || 1.0));
+</script>
+</body></html>

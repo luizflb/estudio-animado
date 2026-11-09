@@ -1,0 +1,54 @@
+{
+ "_antebraco": {
+  "e": "antebraco_e",
+  "d": "antebraco_d"
+ },
+ "apontar": {
+  "braco": 75,
+  "antebraco": 10,
+  "mao": "apontando"
+ },
+ "acenar": {
+  "braco": 135,
+  "antebraco": 25,
+  "mao": "acenando",
+  "balanca": {
+   "ang": 16,
+   "vezes": 3
+  },
+  "cabeca": 4
+ },
+ "joinha": {
+  "braco": 35,
+  "antebraco": 95,
+  "mao": "joinha",
+  "cabeca": 3
+ },
+ "mao_aberta": {
+  "braco": 30,
+  "antebraco": 70,
+  "mao": "palma_frente"
+ },
+ "celular": {
+  "braco": 20,
+  "antebraco": 125,
+  "mao": "segura_celular"
+ },
+ "pensar": {
+  "braco": 15,
+  "antebraco": 145,
+  "mao": "punho",
+  "cabeca": 6
+ },
+ "comemorar": {
+  "braco": 128,
+  "antebraco": 38,
+  "mao": "punho",
+  "cabeca": -3
+ },
+ "susto": {
+  "braco": 115,
+  "antebraco": 40,
+  "mao": "aberta_relaxada"
+ }
+}

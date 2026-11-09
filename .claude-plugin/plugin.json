@@ -1,0 +1,6 @@
+{
+  "name": "estudio-animado",
+  "version": "1.0.0",
+  "description": "Estúdio Animado: vídeos todo animados em SVG no Claude Code (vídeo novo a partir de uma história ou tema, ou cópia reescrita de um link), com personagem próprio que fala e gesticula, cenários detalhados no estilo da sua referência, narração grátis ou ElevenLabs, efeitos, música e legendas.",
+  "keywords": ["animação", "video", "svg", "youtube", "hyperframes", "narração", "roteiro"]
+}

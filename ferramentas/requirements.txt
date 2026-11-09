@@ -1,0 +1,8 @@
+numpy
+pillow
+scipy
+matplotlib
+requests
+yt-dlp
+faster-whisper
+edge-tts

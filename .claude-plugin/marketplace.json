@@ -1,0 +1,11 @@
+{
+  "name": "estudio-animado",
+  "owner": { "name": "luizflb" },
+  "plugins": [
+    {
+      "name": "estudio-animado",
+      "source": "./",
+      "description": "Vídeos todo animados em SVG no Claude Code: vídeo novo (história ou tema) ou cópia reescrita de um link, personagem próprio que fala e gesticula, cenários detalhados no estilo da sua referência, narração, efeitos, música e legendas."
+    }
+  ]
+}

@@ -51,8 +51,10 @@ $vpy = Join-Path $venv "Scripts\python.exe"
 & $vpy -m pip install --quiet -r (Join-Path $Pac "ferramentas\requirements.txt")
 if ($WhisperX) {
   Write-Host "Instalando WhisperX (download grande)..."
-  & $vpy -m pip install --quiet torch torchaudio --index-url https://download.pytorch.org/whl/cu121
   & $vpy -m pip install --quiet whisperx
+  # o whisperx puxa o PyTorch sem placa de vídeo: troca pela versão com CUDA, por último, sem mexer nas outras dependências
+  & $vpy -m pip install --quiet --force-reinstall --no-deps torch torchaudio --index-url https://download.pytorch.org/whl/cu128
+  & $vpy -c "import torch; print('WhisperX com placa de vídeo:', torch.cuda.is_available())"
 }
 
 # 4. Conferências

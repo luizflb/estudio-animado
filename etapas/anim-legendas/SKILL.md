@@ -8,6 +8,8 @@ description: "Sempre pergunta se o vídeo terá legendas. Se sim, gera legendas 
 - **Lê:** tempo por palavra da narração, bloco `roteiro`, `_CLAUDE/roteiro/grafia.json`, `mapa` (onde há texto ou personagem embaixo), `~/.animador/perfil/identidade.md` (fonte e cores).
 - **Escreve:** `_CLAUDE/legendas/legendas_vNN.ass`, `_CLAUDE/final/<título>_vNN.mp4` e `_leve.mp4`.
 
+> Quando o /animador chega aqui, ENTRE na etapa e faça a pergunta das legendas; não pare antes perguntando se segue (feedback: "era pra avançar").
+
 ## 1. Sempre perguntar primeiro
 **"Este vídeo vai ter legendas?"** (botões: Sim / Não). A resposta é de cada vídeo: nunca assumir pela resposta de um vídeo anterior.
 - **Não:** marque `legendas` como `nao_precisa` e vá direto para a exportação (passo 4), sem legendas.
@@ -25,6 +27,7 @@ Gere 3 quadros com a legenda queimada em momentos diferentes (ffmpeg `subtitles=
 ## 4. Exportar o vídeo final
 `PY ~/.animador/scripts/exportar_final.py <pasta> --titulo "<título>" [--legendas _CLAUDE/legendas/legendas_vNN.ass]`
 - Usa a mixagem mais nova do som (ou a narração, se não houve som), normaliza para -14 LUFS (pico -1 dB) e gera a versão leve.
+- O script junta as cenas em ordem numérica e corta o áudio cena a cena (início da cena na narração + duração do render), porque os renders somam ~1 s a mais que a narração.
 - Confira a decodificação (o script mostra os erros) e mande a versão leve.
 
 ## Resumo e fechamento

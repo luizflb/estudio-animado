@@ -14,7 +14,8 @@
  * p.boca(tl, t, nome)                                          fechada|pequena|media|A|O|E|sorriso|sorriso_aberto
  * p.expressao(tl, t, "neutro"|"feliz"|"surpreso"|"bravo"|"preocupado"|"desconfiado")
  * p.piscar(tl, t0, t1, semente) | p.respirar(tl, t0, t1) | p.falar(tl, palavras, t0)  palavras: [{palavra, ini, fim}]
- * p.andar(tl, t0, t1, x0, x1) | p.parar(tl, t) | p.gesto(tl, t, nome, lado)  apontar|acenar|joinha|mao_aberta|celular|pensar|comemorar|susto
+ * p.andar(tl, t0, t1, x0, x1) | p.parar(tl, t) | p.gesto(tl, t, nome, lado)  apontar|acenar|joinha|mao_aberta|celular|pensar|comemorar|susto|cocar_cabeca|negar_dedo|mao_testa
+ * Gesto com "frente: true" acende a copia do braco por cima da cabeca (so rig SVG). Expressao nova: entediado.
  */
 (function () {
   function rnd(seed) { let a = seed >>> 0; return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -88,7 +89,7 @@
     return fazerApi({ host, D, osso, camadas, maos, imgs, R, iniciarExtra: null });
   }
 
-  function fazerApi({ host, D, osso, camadas, maos, imgs, R }) {
+  function fazerApi({ host, D, osso, camadas, maos, imgs, R, frente }) {
     const estado = { olhos: R.padrao.olhos, sobrancelhas: R.padrao.sobrancelhas, boca: R.padrao.boca };
     function mostra(tl, t, grupo, v) {
       const g = camadas[grupo];
@@ -105,6 +106,7 @@
         if (imgs[D.maos.osso[l]]) tl.set(imgs[D.maos.osso[l]], { opacity: D.maos.padrao ? 0 : 1 }, 0);
       });
       tl.set(host, { x: 0, y: 0 }, 0);
+      if (frente) ["e", "d"].forEach(l => { tl.set(frente[l].frente, { opacity: 0 }, 0); tl.set(frente[l].tras, { opacity: 1 }, 0); });
     }
 
     const api = {
@@ -204,6 +206,8 @@
         tl.to(osso[b], { rotation: s * G.braco, duration: 0.22, ease: "back.out(1.8)", ...F }, t);
         tl.to(osso[a], { rotation: s * G.antebraco, duration: 0.24, ease: "back.out(1.8)", ...F }, t + 0.03);
         if (G.mao) api.mao(tl, t + 0.06, lado, G.mao);
+        const Fr = G.frente && frente && frente[lado];
+        if (Fr) { tl.set(Fr.frente, { opacity: 1 }, t + 0.1); tl.set(Fr.tras, { opacity: 0 }, t + 0.1); }
         if (G.balanca) for (let k = 0; k < G.balanca.vezes; k++) {
           tl.to(osso[a], { rotation: s * (G.antebraco + G.balanca.ang), duration: 0.14, ease: "sine.inOut", ...F }, t + 0.25 + k * 0.28);
           tl.to(osso[a], { rotation: s * G.antebraco, duration: 0.14, ease: "sine.inOut", ...F }, t + 0.39 + k * 0.28);
@@ -213,6 +217,7 @@
           tl.to([osso[b], osso[a]], { rotation: 0, duration: 0.25, ease: "power2.inOut", ...F }, t + dur);
           if (G.mao) api.mao(tl, t + dur + 0.12, lado, null);
           if (G.cabeca) tl.to(osso[R.osso], { rotation: 0, duration: 0.25, ease: "power2.inOut", ...F }, t + dur);
+          if (Fr) { tl.set(Fr.frente, { opacity: 0 }, t + dur + 0.15); tl.set(Fr.tras, { opacity: 1 }, t + dur + 0.15); }
         }
       },
     };
@@ -222,11 +227,12 @@
   const PADRAO_SVG = {
     expressoes: { neutro: { olhos: "abertos", sobrancelhas: "neutras", boca: "fechada" }, feliz: { olhos: "abertos", sobrancelhas: "levantadas", boca: "sorriso_aberto" },
       surpreso: { olhos: "abertos", sobrancelhas: "levantadas", boca: "O" }, bravo: { olhos: "semicerrados", sobrancelhas: "bravas", boca: "fechada" },
-      preocupado: { olhos: "abertos", sobrancelhas: "preocupadas", boca: "pequena" }, desconfiado: { olhos: "semicerrados", sobrancelhas: "neutras", boca: "sorriso" } },
+      preocupado: { olhos: "abertos", sobrancelhas: "preocupadas", boca: "pequena" }, desconfiado: { olhos: "semicerrados", sobrancelhas: "neutras", boca: "sorriso" }, entediado: { olhos: "semicerrados", sobrancelhas: "preocupadas", boca: "fechada" } },
     andar: { coxa: { e: "coxa_e", d: "coxa_d" }, canela: { e: "canela_e", d: "canela_d" }, braco: { e: "braco_e", d: "braco_d" }, corpo: "quadril", coxa_ang: 12, canela_ang: 8, levanta: 16, braco_ang: 10, quique: 9, ginga: 2 },
     gestos: { _antebraco: { e: "antebraco_e", d: "antebraco_d" }, apontar: { braco: 80, antebraco: 6, mao: "apontando" }, acenar: { braco: 140, antebraco: 22, mao: "acenando", balanca: { ang: 16, vezes: 3 }, cabeca: 4 },
       joinha: { braco: 35, antebraco: 95, mao: "joinha", cabeca: 3 }, mao_aberta: { braco: 30, antebraco: 70, mao: "palma_frente" }, celular: { braco: 20, antebraco: 125, mao: "segura_celular" },
-      pensar: { braco: 15, antebraco: 145, mao: "punho", cabeca: 6 }, comemorar: { braco: 128, antebraco: 38, mao: "punho", cabeca: -3 }, susto: { braco: 115, antebraco: 40, mao: "aberta" } },
+      pensar: { braco: 15, antebraco: 145, mao: "punho", cabeca: 6 }, comemorar: { braco: 128, antebraco: 38, mao: "punho", cabeca: -3 }, susto: { braco: 115, antebraco: 40, mao: "aberta" },
+      /* p3 do trilionario (09/11/2026) */ cocar_cabeca: { braco: 128, antebraco: 118, mao: "punho", balanca: { ang: 10, vezes: 4 }, cabeca: -6 }, negar_dedo: { braco: 30, antebraco: 120, mao: "apontando", balanca: { ang: 14, vezes: 3 }, cabeca: 3 }, mao_testa: { braco: 140, antebraco: 88, mao: "palma_frente", cabeca: -4, frente: true } },
   };
   function criarSVG(host, D, op, id) {
     const S = window.PessoaSVG.construir(host, D, op);
@@ -236,7 +242,7 @@
     D.maos = { osso: { e: "mao_e", d: "mao_d" }, padrao: "relaxada" };
     D.respirar = { osso: "tronco" };
     if (!D.pe) D.pe = 552;  // quadril 70 + coxa 200 + canela 220 + sola do sapato ~62
-    return fazerApi({ host, D, osso: S.ossos, camadas: S.camadas, maos: S.maos, imgs: {}, R: D.rosto });
+    return fazerApi({ host, D, osso: S.ossos, camadas: S.camadas, maos: S.maos, imgs: {}, R: D.rosto, frente: S.frente });
   }
   window.Rig2 = { criar, rnd };
   window.RIGS = window.RIGS || {};

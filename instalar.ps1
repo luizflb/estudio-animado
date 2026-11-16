@@ -1,9 +1,8 @@
 ﻿# Instalador do Estúdio Animado (Windows).
-# Uso:  powershell -ExecutionPolicy Bypass -File instalar.ps1 [-WhisperX] [-SemSkills] [-Raiz <pasta>]
+# Uso:  powershell -ExecutionPolicy Bypass -File instalar.ps1 [-WhisperX] [-Raiz <pasta>]
 #   -WhisperX : instala também o WhisperX (transcrição mais precisa; só vale em PC com placa NVIDIA; download grande)
-#   -SemSkills: não copia as skills para ~/.claude/skills (use quando instalou o pacote como plugin)
 #   -Raiz     : pasta-base no lugar do seu usuário (para testes)
-param([switch]$WhisperX, [switch]$SemSkills, [string]$Raiz = $HOME)
+param([switch]$WhisperX, [string]$Raiz = $HOME)
 $ErrorActionPreference = "Stop"
 $Pac = $PSScriptRoot
 $Dest = Join-Path $Raiz ".animador"
@@ -30,13 +29,17 @@ foreach ($d in @("perfil\referencias", "perfil\analises", "perfil\personagem", "
 $env_ = Join-Path $Dest ".env"
 if (-not (Test-Path $env_)) { Set-Content -Encoding utf8 $env_ "# chaves (ex.: ELEVENLABS_API_KEY=...)" }
 
-# 2. Skills
-if (-not $SemSkills) {
-  $sk = Join-Path $Raiz ".claude\skills"
-  New-Item -ItemType Directory -Force -Path $sk | Out-Null
-  Get-ChildItem (Join-Path $Pac "skills") -Directory | ForEach-Object { Copy-Item -Recurse -Force $_.FullName $sk }
-  Write-Host "Skills copiadas para $sk"
+# 2. Skills: as etapas (anim-*) vao para ~/.claude/skills; a skill mestra (/animador) e esta pasta.
+#    Se o pacote nao foi clonado em ~/.claude/skills/animador (ex.: baixou o ZIP), copia tambem a mestra.
+$sk = Join-Path $Raiz ".claude\skills"
+New-Item -ItemType Directory -Force -Path $sk | Out-Null
+Get-ChildItem (Join-Path $Pac "etapas") -Directory | ForEach-Object { Copy-Item -Recurse -Force $_.FullName $sk }
+$mestra = Join-Path $sk "animador"
+if ((Resolve-Path $Pac).Path.TrimEnd('\') -ne $mestra.TrimEnd('\')) {
+  New-Item -ItemType Directory -Force -Path $mestra | Out-Null
+  Copy-Item -Force (Join-Path $Pac "SKILL.md"), (Join-Path $Pac "regras-comuns.md") $mestra
 }
+Write-Host "Skills em $sk (animador + etapas)"
 
 # 3. Python próprio + bibliotecas
 $py = $null

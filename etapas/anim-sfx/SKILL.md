@@ -18,10 +18,12 @@ Sem `~/.animador/sons/` ou `musicas/`: peça o "sim" e rode `PY ~/.animador/scri
    - Densidade aprovada como padrão: ~35 por minuto, com whoosh suave (de ar) nas trocas de cena sem outro som perto; eventos leves com som baixo (-3 dB). O maior impacto no ápice do gancho.
    - Sem repetir o mesmo arquivo em ~20 s (use as variações de cada categoria).
    - Sons longos (ambiente, passos, risada) com `dur_max`.
+   - **Nível aprovado:** efeitos +3 dB acima do alvo padrão do `sfx.py` (o padrão ficou baixo nos testes).
 3. **Gravar:** `PY ~/.animador/scripts/sfx.py <pasta> _CLAUDE/sfx/rascunho_vNN.json --fim <duração total>`. Corrija os avisos (repetido, colados, sem principal).
 
 ## Música
 - Uma faixa por parte (ou uma só, se o clima não muda), trocando só nas viradas, com fade cruzado. **Evite as faixas famosas em memes** (lista em `musicas/LICENCAS.md`): deixam o vídeo com cara de piada. Prefira trilha cinematográfica ou ambiente.
+- **Música por clima:** a faixa muda com o clima da fala, só nas viradas da história e num corte de cena; 2–3 trocas por parte, fade cruzado de 1,5 s; nunca a cada frase.
 - Mostre a escolha antes de gravar: parte, faixa, por quê. A pessoa troca por número.
 - Plano em `_CLAUDE/sfx/musica_vNN.json` (`distancia_db` 20, `respiro_db` 3, `denso_db` 2, `fade` 1.5, `trechos` com id, faixa, ini, fim) e `PY ~/.animador/scripts/rec_musica.py <pasta> _CLAUDE/sfx/musica_vNN.json`.
 

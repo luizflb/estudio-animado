@@ -10,11 +10,12 @@ Fluxo: anim-iniciar → anim-estilo → anim-personagem → anim-roteiro → ani
 Antes de tudo, leia `regras-comuns.md` (nesta pasta), uma vez por sessão.
 
 ## 0. Instalação (primeira vez no computador)
-Se `~/.animador/scripts/estado.py` não existe, as ferramentas ainda não foram instaladas.
-1. Ache a pasta do pacote: é a pasta-mãe de `skills/` (a "Base directory" desta skill, duas pastas acima). Nela estão `instalar.ps1` (Windows) e `instalar.sh` (Mac/Linux).
-2. Explique em 3 linhas o que o instalador faz (copia as ferramentas para `~/.animador`, cria um Python próprio, instala as bibliotecas e confere ffmpeg, Node e Chrome) e peça o "sim".
-3. Rode o instalador e mostre o resultado. Se esta skill veio de um plugin (a "Base directory" está dentro de `~/.claude/plugins/`), use `-SemSkills` (Windows) ou `--sem-skills` (Mac/Linux): o plugin já traz as skills. Com placa NVIDIA, ofereça `-WhisperX` / `--whisperx`. Se faltar ffmpeg, Node ou Chrome, diga como instalar e espere.
-4. Pergunte se pode baixar os sons (Mixkit, grátis) e as músicas (Kevin MacLeod, grátis com crédito): `PY ~/.animador/scripts/baixar_sons.py` e `baixar_musicas.py`.
+Se `~/.animador/scripts/estado.py` não existe, ou se as skills das etapas (`anim-iniciar` … `anim-legendas`) não aparecem na lista de skills, falta instalar.
+1. A pasta do pacote é a "Base directory" desta skill (normalmente `~/.claude/skills/animador`, onde o repositório foi clonado). Nela estão `instalar.ps1` (Windows) e `instalar.sh` (Mac/Linux), `etapas/` (as skills de cada etapa) e `ferramentas/`.
+2. Explique em 3 linhas o que o instalador faz (copia as skills das etapas para `~/.claude/skills`, as ferramentas para `~/.animador`, cria um Python próprio, instala as bibliotecas e confere ffmpeg, Node e Chrome) e peça o "sim".
+3. Rode o instalador e mostre o resultado. Com placa NVIDIA, ofereça `-WhisperX` / `--whisperx`. Se faltar ffmpeg, Node ou Chrome, diga como instalar e espere. As skills novas aparecem depois de reiniciar o Claude Code (ou abrir uma conversa nova).
+4. Atualizar depois: `git pull` nesta pasta e rodar o instalador de novo (o perfil da pessoa, o estilo, a voz e os personagens nunca são sobrescritos).
+5. Pergunte se pode baixar os sons (Mixkit, grátis) e as músicas (Kevin MacLeod, grátis com crédito): `PY ~/.animador/scripts/baixar_sons.py` e `baixar_musicas.py`.
 
 ## 1. Começo: novo ou cópia
 Se não existe `_CLAUDE/projeto.json` na pasta atual:

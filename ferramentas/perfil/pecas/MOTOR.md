@@ -40,3 +40,13 @@ Ficha JSON por cena → `python ~/.animador/scripts/motor_cena.py <ficha.json> <
 - Vários nomes de mão apontam para o mesmo desenho: o rig acende pelo desenho, não pelo nome.
 - O "flash 0-3" do `pisca.py` dispara quando a cena começa em movimento: confira a diferença quadro a quadro (uniforme = movimento).
 - Cortador de folhas: área branca fechada NÃO é fundo por padrão (`--buracos` só para mãos e alças), senão camisa branca, prato e fumaça somem.
+- **Posição do ator vai no CSS (`left`), não em `tl.set(x)` no tempo 0:** no render com vários processos o ator sumia ou pulava para x=0 em quadros alternados. O `andar` anima só o deslocamento a partir dessa posição.
+- Tempo da palavra 1 (em 0,0) e texto no tempo 0: o motor prende o tempo em ≥ 0 e o texto em ≥ 0,04 s (antes sumiam).
+- Objeto de mão (`segurar`) vai no braço de trás (o da frente fica escondido nos gestos "frente"); texto nunca no lugar da mão com o objeto.
+- Peça do cenário que gira (câmera de segurança): girar dentro de um `<g>` novo, com a origem da própria peça (com a origem da ficha ela "voa").
+- Ator que sobe junto com um objeto (ilha) só aparece quando o objeto aparece; texto grande não cobre o personagem no fim do plano.
+- `cair` com várias peças: o motor anima depois de desenhar (antes os itens ficavam parados desde o quadro 0).
+- Ação no tempo 0 de um plano que não é o primeiro começa quando o plano entra (não no começo da cena).
+- Zoom "na palavra": ponha um ponto parado antes (t=0 e `palavra:N` com o mesmo zoom, depois o zoom), senão começa no quadro 0.
+- **Luz de dia:** névoa laranja de UMA direção; a luz sai das janelas e lâmpadas reais do cenário (tabela `FONTES`), a grade da janela vai no chão entre o fundo e o meio, a sombra é a silhueta do personagem para longe da fonte. Nada de raios desenhados nem faixas no chão.
+- **Noite:** `"atmosfera": {"lua": true}` (ou `clima: "noite"`): luar branco azulado VISÍVEL (~80% da força), sem nenhuma luz amarela, ambiente de noite sem exagerar no escuro (0,32 ficou escuro demais). Objeto que deve ficar aceso acima do escuro (janela acesa): `"camada": "acima"`.

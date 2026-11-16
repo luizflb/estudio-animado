@@ -10,7 +10,7 @@ Ficha (tempos em segundos da cena; "palavra:N" = início da N-ésima palavra da 
  "id": "t01", "duracao": 5.9, "audio": "caminho.mp3", "palavras": "caminho.json (tempos do ElevenLabs)",
  "cenario": {"tipo": "ruaComercio"},
  "camera": [{"t": 0, "zoom": 1, "x": 960, "y": 540}, {"t": 5, "zoom": 1.3, "x": 900, "y": 600, "ease": "power1.inOut"}],
- "atores": [{"id": "luiz", "rig": "principal", "x": 300, "pes": 800, "escala": 0.3, "fala": true,
+ "atores": [{"id": "eu", "rig": "principal", "x": 300, "pes": 800, "escala": 0.3, "fala": true,
              "acoes": [{"t": 0.2, "andar_ate": 900, "dur": 2}, {"t": "palavra:1", "gesto": "acenar", "lado": "d", "dur": 1},
                        {"t": 2, "expressao": "surpreso"}, {"t": 0, "piscar": true}]}],
  "objetos": [{"tipo": "carroHatch", "cor": "#e2544f", "camada": "frente", "x": -600, "pes": 1010, "escala": 0.55,
@@ -216,7 +216,8 @@ def renderizar(ficha, pasta, previa):
     while os.path.exists(os.path.join(rd, f"{ficha['id']}_v{n:02d}.mp4")):
         n += 1
     out = os.path.join(rd, f"{ficha['id']}_v{n:02d}.mp4")
-    subprocess.run(f'npx --yes {HF} render -o "{out}"', cwd=pasta, shell=True, check=True)
+    w = f' -w {ficha["workers"]}' if ficha.get('workers') else ''  # varios processos podiam divergir no estado (pisca em quadros alternados)
+    subprocess.run(f'npx --yes {HF} render{w} -o "{out}"', cwd=pasta, shell=True, check=True)
     print('render', out)
     # registra a cena no estado do projeto (pasta da cena = <projeto>/_CLAUDE/animacao/cNN)
     proj = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(pasta))))

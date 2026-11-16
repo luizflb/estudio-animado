@@ -12,27 +12,26 @@ Dois jeitos de começar:
 - Opcional: placa de vídeo NVIDIA, para a transcrição mais precisa (WhisperX). Sem ela, usa o faster-whisper.
 - Opcional: conta no ElevenLabs, se quiser narrar com a sua voz clonada. Sem ela, a narração é grátis (vozes neurais da Microsoft).
 
-## Instalação
+## Como instalar
+Abra o Claude Code e cole:
 
-### Opção A: como plugin (pelo próprio Claude Code)
-1. No Claude Code, digite:
-   ```
-   /plugin marketplace add luizflb/estudio-animado
-   /plugin install estudio-animado@estudio-animado
-   ```
-2. Abra o Claude Code numa pasta vazia com o nome do vídeo e digite `/animador`. Na primeira vez ele roda o instalador das ferramentas (com o seu "sim").
+```
+Instala esta skill para mim, clonando em ~/.claude/skills/animador: https://github.com/luizflb/estudio-animado
+```
 
-### Opção B: baixando a pasta
-1. Baixe em https://github.com/luizflb/estudio-animado (botão **Code → Download ZIP**) e descompacte em qualquer lugar.
-2. Rode o instalador:
-   - **Windows:** clique com o botão direito em `instalar.ps1` → "Executar com o PowerShell"; ou, num terminal: `powershell -ExecutionPolicy Bypass -File instalar.ps1`
-     (com placa NVIDIA: acrescente `-WhisperX`)
-   - **Mac/Linux:** `bash instalar.sh` (com placa NVIDIA: `--whisperx`)
-3. O instalador copia as ferramentas para `~/.animador`, as skills para `~/.claude/skills`, cria um Python próprio e instala as bibliotecas.
-4. Abra o Claude Code **numa pasta vazia com o nome do vídeo** e digite **`/animador`**.
-   No primeiro uso ele pergunta se pode baixar os sons (Mixkit) e as músicas (Kevin MacLeod), que são grátis.
+Ou, pelo terminal:
 
-**Como plugin:** se você colocar esta pasta num repositório (GitHub), dá para instalar como plugin do Claude Code. Nesse caso, rode o instalador com `-SemSkills` (Windows) ou `--sem-skills` (Mac/Linux) só para as ferramentas; o próprio `/animador` oferece isso na primeira vez.
+```bash
+git clone https://github.com/luizflb/estudio-animado ~/.claude/skills/animador
+```
+
+Depois, abra o Claude Code **numa pasta vazia com o nome do vídeo** e digite **`/animador`**. Na primeira vez ele roda o instalador (com o seu "sim"): copia as skills de cada etapa para `~/.claude/skills`, as ferramentas para `~/.animador`, cria um Python próprio, instala as bibliotecas e confere ffmpeg, Node e Chrome. Com placa NVIDIA, ele oferece o WhisperX. Em seguida pergunta se pode baixar os sons (Mixkit) e as músicas (Kevin MacLeod), que são grátis.
+
+Se preferir rodar o instalador você mesmo, na pasta clonada:
+- **Windows:** `powershell -ExecutionPolicy Bypass -File instalar.ps1` (com placa NVIDIA: `-WhisperX`)
+- **Mac/Linux:** `bash instalar.sh` (com placa NVIDIA: `--whisperx`)
+
+**Atualizar:** `git pull` dentro de `~/.claude/skills/animador` e rode o instalador de novo. O seu perfil (estilo, voz e personagens) nunca é sobrescrito.
 
 ## Etapas
 `/animador` mostra onde o vídeo está e abre a etapa certa:
@@ -49,6 +48,14 @@ Dois jeitos de começar:
 | animação | o motor transforma cada ficha em cena animada e renderiza |
 | som | efeitos alinhados às animações e música por parte |
 | legendas | **pergunta se você quer legendas** e exporta o vídeo final |
+
+## Novidades da versão 1.1
+- **Shorts e Reels verticais (1080x1920):** motor próprio (`motor_shorts.py`) e cenários redesenhados para o formato em pé (`cenarios_vertical.js`), não recortados do horizontal. Narração mais rápida e planos curtos.
+- **Legenda dinâmica:** a palavra falada acende numa cor e cresce com um zoom suave, cada palavra no seu lugar (sem a linha "andar"), centralizada e dentro da área segura do Reels/Shorts.
+- **Luz e noite:** luz que vem das janelas e lâmpadas do próprio cenário; cenas noturnas com luar branco e janelas acesas.
+- **Música por clima:** a trilha muda com o clima da fala, só nas viradas da história, com fade cruzado.
+- **Exportação:** junta as cenas em ordem e corta o áudio cena a cena (sem escorregar no fim); versão leve vertical para Shorts.
+- Formato de skill, como o [fluxo de edição](https://github.com/luizflb/fluxo-de-edicao): instala colando o link no Claude Code.
 
 ## Licenças
 - Sons: Mixkit Sound Effects Free License (uso em vídeos, inclusive monetizados; não redistribuir o som sozinho). Por isso o pacote só traz a lista e o script de download.

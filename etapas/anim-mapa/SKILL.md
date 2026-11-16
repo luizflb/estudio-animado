@@ -19,6 +19,12 @@ description: "Planeja cada cena do vídeo animado sem animar nada: o que o perso
 - **Gancho primeiro e com mais detalhe**, com storyboard quadro a quadro dos primeiros segundos.
 - **Proporção:** objetos na escala do personagem (carro ≈ 2,7× a escala do ator).
 
+## Aprendizados de vídeos anteriores
+- **O que a fala cita aparece:** lugar ou objeto dito na narração (piscina, quadra, adega) aparece na tela naquela palavra, não só como texto. Em travelling com carro, os objetos ficam fora da faixa do carro.
+- **Final com impacto, nunca corte seco:** depois da última frase, um epílogo visual curto (ex.: recuo até o lugar inteiro, uma luz que apaga) e uma pergunta ou frase final no escuro.
+- **Continuidade de horário:** cenas da mesma noite ficam todas à noite (nada de cortar para fora de dia). Momento triste à noite: ambiente escuro com névoa e brilhos, luar branco.
+- **Posição:** secundários menores em fila ficam mais ao fundo (pés mais altos), senão parecem crianças. No balcão da padaria, a vitrine fica na frente: personagem só no trecho livre (x > 1200). Na `ruaComercio`, a rua da frente cobre abaixo de y≈815: pés na calçada em ~800–810.
+
 ## Formato de cada cena (no mapa, para a pessoa ler)
 ```
 c07 · 0:42–0:51 · personagem + objeto

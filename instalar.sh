@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Instalador do Estúdio Animado (Mac/Linux).
-# Uso: bash instalar.sh [--whisperx] [--sem-skills] [--raiz <pasta>]
+# Uso: bash instalar.sh [--whisperx] [--raiz <pasta>]
 set -e
-PAC="$(cd "$(dirname "$0")" && pwd)"; RAIZ="$HOME"; WX=0; SEMSK=0
-while [ $# -gt 0 ]; do case "$1" in --whisperx) WX=1;; --sem-skills) SEMSK=1;; --raiz) RAIZ="$2"; shift;; esac; shift; done
+PAC="$(cd "$(dirname "$0")" && pwd)"; RAIZ="$HOME"; WX=0
+while [ $# -gt 0 ]; do case "$1" in --whisperx) WX=1;; --raiz) RAIZ="$2"; shift;; esac; shift; done
 DEST="$RAIZ/.animador"; echo "Estúdio Animado -> $DEST"
 mkdir -p "$DEST"
 cp -R "$PAC/ferramentas/scripts" "$PAC/ferramentas/guias" "$DEST/"
@@ -15,14 +15,17 @@ cp -R "$PAC/ferramentas/scripts" "$PAC/ferramentas/guias" "$DEST/"
 done
 mkdir -p "$DEST/perfil/referencias" "$DEST/perfil/analises" "$DEST/perfil/personagem" "$DEST/perfil/biblioteca" "$DEST/sons" "$DEST/musicas"
 [ -e "$DEST/.env" ] || echo "# chaves (ex.: ELEVENLABS_API_KEY=...)" > "$DEST/.env"
-if [ $SEMSK -eq 0 ]; then mkdir -p "$RAIZ/.claude/skills"; cp -R "$PAC/skills/"* "$RAIZ/.claude/skills/"; echo "Skills copiadas para $RAIZ/.claude/skills"; fi
+# skills: as etapas (anim-*) vao para ~/.claude/skills; a mestra (/animador) e esta pasta (copia se veio de um ZIP)
+mkdir -p "$RAIZ/.claude/skills"; cp -R "$PAC/etapas/"* "$RAIZ/.claude/skills/"
+if [ "$PAC" != "$(cd "$RAIZ/.claude/skills" && pwd)/animador" ]; then mkdir -p "$RAIZ/.claude/skills/animador"; cp "$PAC/SKILL.md" "$PAC/regras-comuns.md" "$RAIZ/.claude/skills/animador/"; fi
+echo "Skills em $RAIZ/.claude/skills (animador + etapas)"
 PY=$(command -v python3 || command -v python || true)
 [ -z "$PY" ] && { echo "FALTA: Python 3.10+"; exit 1; }
 [ -x "$DEST/venv/bin/python" ] || "$PY" -m venv "$DEST/venv"
 VPY="$DEST/venv/bin/python"
 "$VPY" -m pip install --upgrade pip -q
 "$VPY" -m pip install -q -r "$PAC/ferramentas/requirements.txt"
-[ $WX -eq 1 ] && "$VPY" -m pip install -q whisperx
+[ $WX -eq 1 ] && "$VPY" -m pip install -q whisperx && "$VPY" -m pip install -q --force-reinstall --no-deps torch torchaudio --index-url https://download.pytorch.org/whl/cu128
 OK=1
 command -v ffmpeg >/dev/null || { echo "FALTA: ffmpeg (Mac: brew install ffmpeg | Linux: sudo apt install ffmpeg)"; OK=0; }
 command -v node >/dev/null || { echo "FALTA: Node.js 18+ (https://nodejs.org) - usado pelo HyperFrames"; OK=0; }

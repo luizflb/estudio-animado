@@ -13,12 +13,16 @@ Antes da primeira cena da sessão, leia a skill `hyperframes` (contrato de rende
 
 ## Por cena (caminho padrão: o motor)
 1. **Gerar:** `PY ~/.animador/scripts/motor_cena.py _CLAUDE/mapa/fichas/cNN.json _CLAUDE/animacao/cNN`.
-2. **Olhar antes do render:** `npx --yes hyperframes@<versão> snapshot --at <tempos dos momentos>` dentro da pasta da cena; leia a folha de contato. Confira: personagem no chão e em proporção, boca mexendo, gesto apontando para algo, objetos em escala, texto legível, nada cortado.
+2. **Olhar antes do render:** `npx --yes hyperframes@<versão> snapshot --at <tempos dos momentos>` dentro da pasta da cena; leia a folha de contato. Confira: personagem no chão e em proporção, boca mexendo, gesto apontando para algo, objetos em escala, texto legível (com a placa escura atrás; sem placa só em fundo liso e escuro), nada cortado.
 3. **Renderizar:** `PY ~/.animador/scripts/motor_cena.py <ficha> _CLAUDE/animacao/cNN --render --previa` (versão nova, confere pisca e junta a voz). Uma cena por vez.
 4. **Eventos para o som:** escreva `_CLAUDE/animacao/cNN/eventos_cNN.json` (`{"cena", "eventos": [{"t", "tipo", "forca", "desc"}]}`) com entradas, gestos, impactos, objetos, troca de câmera.
 5. Registre no estado: `animacao.cenas.cNN` com `render`, `frames`, `versao`, `status`.
 
 Cena `"manual": true`: construa à mão em HyperFrames, com `seek_fix.js` (estado do tempo 0 em `tl.set(…, 0)`; o que muda por código como função do tempo) e os mesmos personagens e desenhos SVG.
+
+## Sincronia e prévia (aprendido)
+- Cada evento entra na palavra em que o assunto COMEÇA a ser dito, nunca na última palavra da frase; o motor já adianta ~0,17 s.
+- Prévia de trecho: o áudio de cada cena é completado até o fim do vídeo dela (`apad` + `atrim`), senão a trilha fica mais curta que o vídeo.
 
 ## Faltou algo na hora?
 - Gesto, pose ou expressão nova: acrescente ao rig2 (ângulos) ou ao `pessoa_svg.js` e teste na página de teste.

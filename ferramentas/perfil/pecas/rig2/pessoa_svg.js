@@ -66,7 +66,8 @@
     const olho = (x, tipo) => {
       if (tipo === "fechado") return `<path d="M ${x - 44} -540 Q ${x} -512 ${x + 44} -540" fill="none" stroke="${C}" stroke-width="9" stroke-linecap="round"/>`;
       const base = `<ellipse cx="${x}" cy="-545" rx="44" ry="52" fill="#fff" stroke="${C}" stroke-width="7"/><circle cx="${x + 2}" cy="-538" r="27" fill="${iris}"/><circle cx="${x + 2}" cy="-538" r="14" fill="#1b1520"/><circle cx="${x + 12}" cy="-550" r="9" fill="#fff"/><circle cx="${x - 6}" cy="-528" r="4.5" fill="#fff"/>`;
-      if (tipo === "semi") return base + `<path d="M ${x - 48} -600 L ${x + 48} -600 L ${x + 48} -548 Q ${x} -538 ${x - 48} -548 Z" fill="${pele}"/><path d="M ${x - 46} -547 Q ${x} -537 ${x + 46} -547" fill="none" stroke="${C}" stroke-width="8" stroke-linecap="round"/>`;
+      // palpebra no formato do olho (10/11: o retangulo antigo passava do olho e cobria o aro de cima dos oculos)
+      if (tipo === "semi") return base + `<path d="M ${x - 48.9} -548 A 49 57 0 0 1 ${x + 48.9} -548 Q ${x} -538 ${x - 48.9} -548 Z" fill="${pele}"/><path d="M ${x - 46} -547 Q ${x} -537 ${x + 46} -547" fill="none" stroke="${C}" stroke-width="8" stroke-linecap="round"/>`;
       return base;
     };
     add("olhos", "abertos", olho(-88) + olho(88));
@@ -103,6 +104,8 @@
     if (fase === "tras") {
       if (est === "chanel") g.insertAdjacentHTML("beforeend", p("M -235 -560 Q -250 -440 -228 -390 L 228 -390 Q 250 -440 235 -560 Z"));
       if (est === "longo") g.insertAdjacentHTML("beforeend", p("M -232 -570 Q -262 -380 -230 -250 L 230 -250 Q 262 -380 232 -570 Z"));
+      // ondas (10/11, "ela" do trilionario): longo ondulado ate os ombros, volume dos lados
+      if (est === "ondas") g.insertAdjacentHTML("beforeend", p("M -236 -590 Q -276 -500 -250 -430 Q -284 -360 -246 -296 Q -262 -244 -216 -226 Q -160 -236 -132 -300 L 132 -300 Q 160 -236 216 -226 Q 262 -244 246 -296 Q 284 -360 250 -430 Q 276 -500 236 -590 Z", ["M -250 -470 Q -228 -440 -252 -404", "M -246 -350 Q -222 -318 -244 -282", "M 250 -470 Q 228 -440 252 -404", "M 246 -350 Q 222 -318 244 -282"].map(d => `<path d="${d}" fill="none" stroke="${C2}" stroke-width="6" stroke-linecap="round"/>`).join("")));
       if (est === "coque") g.insertAdjacentHTML("beforeend", p("M -78 -790 A 78 70 0 1 1 78 -790 A 78 70 0 1 1 -78 -790 Z", brilho("M -40 -820 Q 0 -840 36 -824")));
       return;
     }
@@ -112,6 +115,7 @@
       lateral: p("M -214 -580 Q -230 -770 -10 -792 Q 190 -800 214 -620 Q 205 -580 196 -560 Q 170 -660 40 -676 Q -80 -650 -150 -690 Q -190 -640 -214 -580 Z") + brilho("M -60 -760 Q 40 -780 120 -748"),
       chanel: p("M -238 -560 Q -250 -790 0 -800 Q 250 -790 238 -560 Q 200 -600 180 -660 Q 60 -630 -60 -690 Q -150 -650 -200 -600 Q -220 -575 -238 -560 Z") + brilho("M -150 -730 Q -40 -780 80 -760"),
       longo: p("M -238 -570 Q -250 -790 0 -800 Q 250 -790 238 -570 Q 190 -660 0 -700 Q -190 -660 -238 -570 Z") + brilho("M -140 -740 Q -30 -780 90 -762"),
+      ondas: p("M -242 -560 Q -258 -800 10 -808 Q 254 -800 242 -560 Q 230 -610 206 -650 Q 140 -690 60 -726 Q 20 -690 -40 -668 Q -120 -650 -170 -628 Q -214 -606 -242 -560 Z") + brilho("M -160 -730 Q -60 -780 60 -770") + ["M 40 -716 Q 110 -700 170 -662", "M -120 -652 Q -170 -640 -214 -600"].map(d => `<path d="${d}" fill="none" stroke="${C2}" stroke-width="6" stroke-linecap="round"/>`).join(""),
       coque: p("M -216 -590 Q -226 -770 0 -782 Q 226 -770 216 -590 Q 180 -670 0 -684 Q -180 -670 -216 -590 Z") + brilho("M -120 -740 Q -20 -768 90 -748"),
       careca: p("M -214 -560 Q -224 -640 -196 -660 Q -186 -600 -186 -560 Z") + p("M 214 -560 Q 224 -640 196 -660 Q 186 -600 186 -560 Z"),
       ondulado: p("M -230 -540 C -264 -620 -252 -700 -208 -748 Q -218 -804 -160 -814 Q -150 -862 -88 -850 Q -58 -886 2 -866 Q 52 -890 98 -852 Q 154 -866 176 -818 Q 232 -812 226 -756 Q 270 -700 232 -540 C 216 -598 198 -630 162 -650 Q 122 -632 98 -668 Q 52 -718 2 -682 Q -40 -714 -82 -678 Q -132 -702 -162 -654 Q -198 -622 -212 -582 Q -222 -560 -230 -540 Z")
@@ -146,7 +150,8 @@
       const pe = osso(cn, "translate(0 220)", `tenis_${l}`, ossos);
       const sapato = S.tipo === "sapatilha" ? `M -54 -6 Q -66 34 -44 52 Q 10 60 70 46 Q 84 24 56 6 Q 0 -14 -54 -6 Z`
         : `M -58 -16 Q -72 36 -48 58 Q 10 68 80 54 Q 96 26 64 2 Q 30 -22 -58 -16 Z`;
-      const det = S.tipo === "tenis" ? `<path d="M -54 30 Q 10 44 82 34 Q 94 46 82 56 Q 10 68 -48 58 Q -62 46 -54 30 Z" fill="#f6f6f8" stroke="${C}" stroke-width="5"/><path d="M 36 14 Q 66 10 84 30 Q 60 36 40 32 Z" fill="#f6f6f8" stroke="${C}" stroke-width="5"/><path d="M -24 0 L 14 10 M -18 14 L 22 22" stroke="${C}" stroke-width="11" stroke-linecap="round"/><path d="M -24 0 L 14 10 M -18 14 L 22 22" stroke="#fff" stroke-width="5" stroke-linecap="round"/>`
+      const det = S.tipo === "pantufa" ? `<circle cx="70" cy="18" r="22" fill="#fff8e6" stroke="${C}" stroke-width="5"/><path d="M -50 40 Q 10 52 80 44" stroke="${esc(sc, -0.2)}" stroke-width="6" fill="none"/>`
+        : S.tipo === "tenis" ? `<path d="M -54 30 Q 10 44 82 34 Q 94 46 82 56 Q 10 68 -48 58 Q -62 46 -54 30 Z" fill="#f6f6f8" stroke="${C}" stroke-width="5"/><path d="M 36 14 Q 66 10 84 30 Q 60 36 40 32 Z" fill="#f6f6f8" stroke="${C}" stroke-width="5"/><path d="M -24 0 L 14 10 M -18 14 L 22 22" stroke="${C}" stroke-width="11" stroke-linecap="round"/><path d="M -24 0 L 14 10 M -18 14 L 22 22" stroke="#fff" stroke-width="5" stroke-linecap="round"/>`
         : S.tipo === "sapatilha" ? `<path d="M 6 4 q 10 -10 20 0 q -10 10 -20 0" fill="${esc(sc, -0.25)}"/>`
           : `<path d="M 0 2 Q 30 18 56 26" stroke="#fff" stroke-width="7" opacity=".35" stroke-linecap="round"/>`;
       forma({ c: grupo(pe.c, `scale(${sx} 1)`), f: grupo(pe.f, `scale(${sx} 1)`) }, sapato, sc, det);
@@ -157,7 +162,7 @@
       const sk = vestido ? rc : cc;
       hp.innerHTML = `<path d="M -118 -10 L 118 -10 L 150 150 Q 0 175 -150 150 Z" fill="${sk}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M -70 0 L -86 156 M 0 0 L 0 162 M 70 0 L 86 156" stroke="${esc(sk, -0.2)}" stroke-width="6"/>`;
     } else {
-      hp.innerHTML = `<path d="M -116 -10 L 116 -10 L 124 104 Q 60 116 6 96 L -6 96 Q -60 116 -124 104 Z" fill="${cc}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M 0 0 L 0 92" stroke="${esc(cc, -0.3)}" stroke-width="5"/><rect x="-116" y="-10" width="232" height="22" fill="${esc(cc, -0.35)}" stroke="${C}" stroke-width="6"/><rect x="-18" y="-12" width="36" height="26" rx="5" fill="#c9a24a" stroke="${C}" stroke-width="5"/>`;
+      hp.innerHTML = `<path d="M -116 -10 L 116 -10 L 124 104 Q 60 116 6 96 L -6 96 Q -60 116 -124 104 Z" fill="${cc}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/>${Ca.tipo === "pijama" ? [-90, -50, 50, 90].map(x => `<path d="M ${x} 4 L ${x + (x > 0 ? 4 : -4)} 100" stroke="${esc(cc, 0.35)}" stroke-width="8"/>`).join("") : ""}<path d="M 0 0 L 0 92" stroke="${esc(cc, -0.3)}" stroke-width="5"/><rect x="-116" y="-10" width="232" height="22" fill="${esc(cc, -0.35)}" stroke="${C}" stroke-width="6"/><rect x="-18" y="-12" width="36" height="26" rx="5" fill="#c9a24a" stroke="${C}" stroke-width="5"/>`;
     }
     // ----- tronco (com braços e cabeça) -----
     const tronco = grupo(quadril); ossos.tronco = [tronco];
@@ -180,31 +185,48 @@
       if (T === "jaleco") det += `<path d="M -150 -262 L -60 -330 L -10 -60 L -40 30 L -138 22 Z M 150 -262 L 60 -330 L 10 -60 L 40 30 L 138 22 Z" fill="#f7f8fb" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M -60 -320 Q -100 -160 -60 -130 Q -30 -110 -26 -160" fill="none" stroke="#3a3a44" stroke-width="10"/><circle cx="-26" cy="-160" r="14" fill="#9aa0ab" stroke="${C}" stroke-width="5"/><rect x="62" y="-90" width="56" height="50" rx="6" fill="none" stroke="#c9ccd4" stroke-width="5"/>`;
     } else if (T === "blusa" || T === "vestido") {
       det = `<path d="M -54 -330 Q 0 -250 54 -330" fill="${pele}" stroke="${C}" stroke-width="6"/><path d="M -120 -150 Q 0 -126 120 -150" stroke="${rcs}" stroke-width="8" fill="none" opacity=".7"/>`;
+    } else if (T === "pijama") {
+      det = [-100, -60, -20, 20, 60, 100].map(x => `<path d="M ${x} -326 L ${x + x * 0.08} 28" stroke="${esc(rc, 0.35)}" stroke-width="10"/>`).join("") +
+        `<path d="M -56 -332 L 0 -250 L 56 -332" fill="${pele}" stroke="${C}" stroke-width="6" stroke-linejoin="round"/><path d="M -70 -336 L -6 -246 L -40 -230 L -96 -318 Z M 70 -336 L 6 -246 L 40 -230 L 96 -318 Z" fill="${esc(rc, -0.12)}" stroke="${C}" stroke-width="6" stroke-linejoin="round"/>` +
+        `<path d="M 0 -250 L 0 30" stroke="${esc(rc, -0.3)}" stroke-width="6"/>` + [-200, -140, -80, -20].map(y => `<circle cx="14" cy="${y}" r="9" fill="#fff8e6" stroke="${C}" stroke-width="4"/>`).join("") +
+        `<path d="M -110 -220 L -56 -220 L -56 -172 Q -83 -164 -110 -172 Z" fill="${esc(rc, -0.12)}" stroke="${C}" stroke-width="5"/>`;
     } else { // camiseta
       det = `<path d="M -54 -332 Q 0 -290 54 -332" fill="${pele}" stroke="${C}" stroke-width="6"/><path d="M -62 -334 Q 0 -280 62 -334" fill="none" stroke="${rcs}" stroke-width="9"/>`;
     }
+    /* roupas e uniformes novos (09/11/2026): dolma de chef, blazer sem gravata, estampa havaiana, colete de fotografo, avental, macacao */
+    if (T === "dolma") det = `<path d="M -54 -332 L -54 -300 Q 0 -286 54 -300 L 54 -332" fill="#f7f8fb" stroke="${C}" stroke-width="6"/><path d="M -20 -300 L 60 -300 L 60 20" fill="none" stroke="${esc(rc, -0.15)}" stroke-width="6"/>` + [-240, -170, -100, -30].map(y => `<circle cx="-4" cy="${y}" r="10" fill="#2b2a31"/><circle cx="96" cy="${y}" r="10" fill="#2b2a31"/>`).join("") + `<path d="M -120 -40 L -40 -40" stroke="${esc(rc, -0.15)}" stroke-width="5"/>`;
+    if (T === "blazer") { const bl = R.blusa || "#f7f8fb";
+      det = `<path d="M -50 -332 L 0 -200 L 50 -332 Z" fill="${bl}" stroke="${C}" stroke-width="6"/><path d="M -36 -326 Q 0 -300 36 -326" fill="none" stroke="${esc(bl, -0.15)}" stroke-width="5"/>
+        <path d="M -62 -326 L 0 -170 L -18 -40 L -42 -330 Z M 62 -326 L 0 -170 L 18 -40 L 42 -330 Z" fill="${rcs}" stroke="${C}" stroke-width="6" stroke-linejoin="round"/><path d="M 0 -170 L 0 30" stroke="${C}" stroke-width="5"/><circle cx="16" cy="-110" r="8" fill="${esc(rc, 0.2)}" stroke="${C}" stroke-width="4"/><circle cx="16" cy="-50" r="8" fill="${esc(rc, 0.2)}" stroke="${C}" stroke-width="4"/><path d="M 66 -200 L 112 -200" stroke="${C}" stroke-width="5"/>`; }
+    if (R.estampa === "havaiana") det += [[-100, -250], [40, -270], [100, -160], [-60, -140], [0, -40], [-110, -40], [90, -50]].map(([x, y], i) => `<g transform="translate(${x} ${y}) rotate(${i * 40})">${[0, 72, 144, 216, 288].map(a => `<ellipse cx="0" cy="-16" rx="10" ry="16" fill="${["#F5C542", "#ffffff", "#ef5b8c"][i % 3]}" transform="rotate(${a})"/>`).join("")}<circle r="7" fill="#e2544f"/></g><path d="M ${x + 20} ${y + 20} q 20 4 30 20" stroke="#3f8f4a" stroke-width="7" fill="none"/>`).join("");
+    if (R.colete) det += `<path d="M -150 -262 L -60 -330 L -36 30 L -138 22 Z M 150 -262 L 60 -330 L 36 30 L 138 22 Z" fill="${R.colete}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/>` + [[-118, -190], [-84, -190], [-118, -90], [-84, -90], [62, -190], [96, -190], [62, -90], [96, -90]].map(([x, y]) => `<rect x="${x}" y="${y}" width="30" height="40" rx="4" fill="${esc(R.colete, -0.12)}" stroke="${C}" stroke-width="4"/><path d="M ${x} ${y + 12} h 30" stroke="${C}" stroke-width="3"/>`).join("");
+    if (R.avental) det += `<path d="M -100 -250 L 100 -250 L 112 40 L -112 40 Z" fill="${R.avental}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M -100 -250 L -60 -330 M 100 -250 L 60 -330" stroke="${R.avental}" stroke-width="14"/><rect x="-60" y="-120" width="120" height="70" rx="8" fill="${esc(R.avental, -0.12)}" stroke="${C}" stroke-width="5"/><path d="M -140 -60 Q 0 -40 140 -60" stroke="${esc(R.avental, -0.25)}" stroke-width="10" fill="none"/>`;
+    if (R.macacao) det += `<path d="M -110 -200 L 110 -200 L 124 40 L -124 40 Z" fill="${R.macacao}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M -90 -200 L -70 -330 M 90 -200 L 70 -330" stroke="${C}" stroke-width="30" stroke-linecap="round"/><path d="M -90 -200 L -70 -330 M 90 -200 L 70 -330" stroke="${R.macacao}" stroke-width="18" stroke-linecap="round"/><circle cx="-88" cy="-206" r="10" fill="#e0b23e" stroke="${C}" stroke-width="4"/><circle cx="88" cy="-206" r="10" fill="#e0b23e" stroke="${C}" stroke-width="4"/><rect x="-50" y="-170" width="100" height="70" rx="6" fill="${esc(R.macacao, -0.12)}" stroke="${C}" stroke-width="5"/><path d="M -30 -150 h 30" stroke="#F5C542" stroke-width="8"/>`;
     if (R.cracha) det += `<path d="M -40 -300 L -70 -150 M -100 -296 L -70 -150" stroke="#3a64b0" stroke-width="7"/><rect x="-98" y="-156" width="56" height="70" rx="6" fill="#fff" stroke="${C}" stroke-width="5"/><circle cx="-70" cy="-130" r="10" fill="#9aa0ab"/><path d="M -88 -104 h 36" stroke="#9aa0ab" stroke-width="5"/>`;
     if (X.fone) det += `<path d="M 150 -400 Q 120 -330 92 -300 Q 70 -270 84 -240" fill="none" stroke="#e8e9ee" stroke-width="5"/><path d="M 150 -400 Q 120 -330 92 -300 Q 70 -270 84 -240" fill="none" stroke="#9aa0ab" stroke-width="2" stroke-dasharray="6 6"/>`;
     tg.innerHTML = `<path d="${torso}" fill="${rc}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M -138 22 Q 0 42 138 22 L 140 0 Q 0 20 -140 0 Z" fill="${rcs}"/><path d="M -150 -262 Q -146 -200 -120 -180" stroke="${rcs}" stroke-width="10" fill="none" opacity=".6"/>${det}`;
     // braços (duas passadas cada), na frente do tronco e atrás da cabeça
-    const bracos = { c: grupo(tronco), f: grupo(tronco) };
     const maoV = { e: {}, d: {} };
-    const longa = R.manga === "longa" || T === "terno" || T === "jaleco";
+    const longa = R.manga === "longa" || T === "terno" || T === "jaleco" || T === "pijama" || T === "dolma" || T === "blazer";
     const corManga = T === "jaleco" ? "#f7f8fb" : rc, punho = T === "terno" ? "#f2f3f6" : esc(corManga, -0.12);
-    ["e", "d"].forEach(l => {
+    const fazerBracos = (bracos, mapa, maosV, lados = ["e", "d"]) => lados.forEach(l => {
       const sx = l === "e" ? -1 : 1;
-      const b = osso(bracos, `translate(${sx * 128} -282) rotate(${sx * -8})`, `braco_${l}`, ossos);
+      const b = osso(bracos, `translate(${sx * 128} -282) rotate(${sx * -8})`, `braco_${l}`, mapa);
       const mangaCurta = !longa && T !== "vestido_alca";
       forma(b, capsula(190, 70, 60), longa ? corManga : pele,
         mangaCurta ? `<path d="M -42 -30 Q 0 -44 42 -30 L 46 84 Q 0 96 -46 84 Z" fill="${corManga}"/><path d="M -46 80 Q 0 92 46 80" stroke="${esc(corManga, -0.25)}" stroke-width="7" fill="none"/>` : `<path d="M -26 40 Q -30 110 -24 160" stroke="${esc(corManga, -0.15)}" stroke-width="8" fill="none"/>`);
       if (mangaCurta) b.c.insertAdjacentHTML("afterbegin", `<path d="M -42 -30 Q 0 -44 42 -30 L 46 84 Q 0 96 -46 84 Z" fill="${C}" stroke="${C}" stroke-width="${LW * 2}" stroke-linejoin="round"/>`);
-      const a = osso(b, `translate(0 190) rotate(${sx * 6})`, `antebraco_${l}`, ossos);
+      const a = osso(b, `translate(0 190) rotate(${sx * 6})`, `antebraco_${l}`, mapa);
       forma(a, capsula(160, 60, 52), longa ? corManga : pele, longa ? `<path d="M -30 128 L 30 128 L 30 152 Q 0 158 -30 152 Z" fill="${punho}"/><path d="M -30 128 L 30 128" stroke="${C}" stroke-width="5"/>` : "");
-      const m = osso(a, "translate(0 160)", `mao_${l}`, ossos);
-      maoV[l] = maos(m, pele, l);
+      const m = osso(a, "translate(0 160)", `mao_${l}`, mapa);
+      maosV[l] = maos(m, pele, l);
     });
+    fazerBracos({ c: grupo(tronco), f: grupo(tronco) }, ossos, maoV);
     // ----- cabeça -----
     const cabecaPos = grupo(tronco, "translate(0 -330)"); const cabeca = grupo(cabecaPos); const cab = grupo(cabeca, "translate(0 330)"); ossos.cabeca = [cabeca];
+    // 10/11: cabelo comprido de tras fica ATRAS do tronco (antes ficava na cabeca, por cima dos ombros); gira junto com a cabeca (mesmo osso)
+    const cabTrasPos = grupo(tronco, "translate(0 -330)"); tronco.insertBefore(cabTrasPos, tronco.firstChild);
+    const cabTras = grupo(cabTrasPos); const cabT = grupo(cabTras, "translate(0 330)"); ossos.cabeca.push(cabTras);
     const V = D.cabeca_vetor && window.CABECAS && window.CABECAS[D.cabeca_vetor];
     let camadas;
     if (V) {
@@ -213,7 +235,7 @@
       const faceG = grupo(cab);
       camadas = rosto(faceG, D, pele);
     } else {
-    cabelo(cab, D, "tras");
+    cabelo(cabT, D, "tras");
     cab.insertAdjacentHTML("beforeend", `<circle cx="-205" cy="-540" r="42" fill="${pele}" stroke="${C}" stroke-width="7"/><circle cx="205" cy="-540" r="42" fill="${pele}" stroke="${C}" stroke-width="7"/><path d="M -205 -555 q 14 10 0 30 M 205 -555 q -14 10 0 30" stroke="${sombraPele}" stroke-width="7" fill="none"/>
       <path d="M -200 -620 Q -205 -780 0 -790 Q 205 -780 200 -620 L 196 -500 Q 180 -380 0 -352 Q -180 -380 -196 -500 Z" fill="${pele}" stroke="${C}" stroke-width="8" stroke-linejoin="round"/>
       <ellipse cx="-128" cy="-470" rx="34" ry="20" fill="#e88a8a" opacity=".35"/><ellipse cx="128" cy="-470" rx="34" ry="20" fill="#e88a8a" opacity=".35"/>
@@ -233,10 +255,34 @@
     if (X.oculos === "sol") cab.insertAdjacentHTML("beforeend", `<path d="M -150 -580 L 150 -580" stroke="#1b1a20" stroke-width="12"/><path d="M -150 -584 L -30 -584 Q -24 -520 -60 -505 Q -130 -500 -146 -540 Z M 150 -584 L 30 -584 Q 24 -520 60 -505 Q 130 -500 146 -540 Z" fill="#1f1e26" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M -120 -572 L -80 -572 M 60 -572 L 100 -572" stroke="#5c5b6a" stroke-width="8" stroke-linecap="round"/><path d="M -150 -580 L -200 -560 M 150 -580 L 200 -560" stroke="#1b1a20" stroke-width="10"/>`);
     if (X.oculos === "redondo") cab.insertAdjacentHTML("beforeend", `<circle cx="-88" cy="-545" r="62" fill="none" stroke="#3a2a22" stroke-width="9"/><circle cx="88" cy="-545" r="62" fill="none" stroke="#3a2a22" stroke-width="9"/><path d="M -26 -548 Q 0 -560 26 -548 M -150 -550 L -200 -560 M 150 -550 L 200 -560" stroke="#3a2a22" stroke-width="8" fill="none"/>`);
     }
+    /* chapeus e headset (09/11/2026): X.chapeu = chef|palha|quepe|capacete|bone (+ X.chapeu_cor, X.chapeu_texto); X.headset = cor */
+    const CH = X.chapeu, chc = X.chapeu_cor;
+    if (CH === "chef") cab.insertAdjacentHTML("beforeend", `<path d="M -170 -730 L -180 -880 Q -260 -900 -230 -980 Q -200 -1060 -110 -1030 Q -60 -1110 20 -1080 Q 100 -1120 150 -1040 Q 250 -1050 240 -960 Q 240 -900 180 -880 L 170 -730 Z" fill="#f7f8fb" stroke="${C}" stroke-width="8" stroke-linejoin="round"/><path d="M -60 -860 Q -50 -960 -20 -1000 M 60 -860 Q 70 -950 100 -990" fill="none" stroke="#dfe2ea" stroke-width="8" stroke-linecap="round"/><rect x="-178" y="-780" width="356" height="60" rx="12" fill="#f7f8fb" stroke="${C}" stroke-width="8"/>`);
+    if (CH === "palha") { const c = chc || "#e8c66a"; cab.insertAdjacentHTML("beforeend", `<ellipse cx="0" cy="-730" rx="320" ry="56" fill="${c}" stroke="${C}" stroke-width="8"/><path d="M -170 -735 Q -180 -900 0 -910 Q 180 -900 170 -735 Z" fill="${c}" stroke="${C}" stroke-width="8"/><path d="M -172 -770 Q 0 -790 172 -770 L 170 -735 Q 0 -755 -170 -735 Z" fill="#c25b4e" stroke="${C}" stroke-width="6"/>${[-240, -160, -80, 0, 80, 160, 240].map(x => `<path d="M ${x} -760 l ${x * 0.04} 50" stroke="${esc(c, -0.2)}" stroke-width="4"/>`).join("")}`); }
+    if (CH === "quepe") { const c = chc || "#26252c"; cab.insertAdjacentHTML("beforeend", `<path d="M -200 -740 L -230 -860 Q 0 -920 230 -860 L 200 -740 Z" fill="${c}" stroke="${C}" stroke-width="8" stroke-linejoin="round"/><rect x="-204" y="-790" width="408" height="50" fill="${esc(c, -0.2)}" stroke="${C}" stroke-width="6"/><path d="M -200 -740 Q 0 -660 200 -740 Q 0 -700 -200 -740 Z" fill="#1b1a20" stroke="${C}" stroke-width="7"/><circle cx="0" cy="-830" r="22" fill="#e0b23e" stroke="${C}" stroke-width="5"/>`); }
+    if (CH === "capacete") { const c = chc || "#F5C542"; cab.insertAdjacentHTML("beforeend", `<path d="M -220 -730 Q -230 -930 0 -940 Q 230 -930 220 -730 Z" fill="${c}" stroke="${C}" stroke-width="8"/><path d="M -260 -730 Q 0 -760 260 -730 L 250 -704 Q 0 -728 -250 -704 Z" fill="${esc(c, -0.12)}" stroke="${C}" stroke-width="7"/><path d="M -30 -930 L -24 -740 M 30 -930 L 24 -740" stroke="${esc(c, -0.15)}" stroke-width="12"/><path d="M -140 -880 Q -110 -910 -60 -916" stroke="#fff" stroke-width="12" fill="none" opacity=".6" stroke-linecap="round"/>`); }
+    if (CH === "bone") { const c = chc || "#e2544f"; cab.insertAdjacentHTML("beforeend", `<path d="M -206 -700 Q -220 -900 0 -905 Q 220 -900 206 -700 Q 0 -740 -206 -700 Z" fill="${c}" stroke="${C}" stroke-width="8"/><path d="M -60 -712 Q 120 -740 300 -690 Q 280 -660 200 -664 Q 60 -690 -60 -690 Z" fill="${esc(c, -0.15)}" stroke="${C}" stroke-width="7" stroke-linejoin="round"/><path d="M 0 -905 V -720" stroke="${esc(c, -0.2)}" stroke-width="6"/><circle cx="0" cy="-905" r="14" fill="${esc(c, -0.2)}" stroke="${C}" stroke-width="4"/>${X.chapeu_texto ? `<text x="0" y="-780" text-anchor="middle" style="font-family:Nunito;font-weight:900;font-size:64px" fill="#fff8e6">${X.chapeu_texto}</text>` : ""}`); }
+    if (X.headset) cab.insertAdjacentHTML("beforeend", `<path d="M -214 -560 Q -230 -830 0 -840 Q 230 -830 214 -560" fill="none" stroke="${C}" stroke-width="22"/><path d="M -214 -560 Q -230 -830 0 -840 Q 230 -830 214 -560" fill="none" stroke="${X.headset}" stroke-width="12"/><rect x="-250" y="-600" width="56" height="100" rx="20" fill="${X.headset}" stroke="${C}" stroke-width="7"/><path d="M -222 -510 Q -200 -420 -90 -420" fill="none" stroke="${C}" stroke-width="10"/><circle cx="-84" cy="-420" r="16" fill="#2b2a31" stroke="${C}" stroke-width="4"/>`);
+    if (X.barba_longa) { // gag: barba branca enorme (por cima da cabeça, com buraco na boca)
+      const bl = X.barba_longa === true ? "#f2f3f6" : X.barba_longa;
+      cab.insertAdjacentHTML("beforeend", `<path d="M -206 -520 Q -222 -370 -176 -250 Q -146 -160 -96 -100 L -66 -130 L -36 -60 L 0 -110 L 36 -60 L 66 -130 L 96 -100 Q 146 -160 176 -250 Q 222 -370 206 -520 Q 176 -444 112 -446 Q 60 -486 0 -482 Q -60 -486 -112 -446 Q -176 -444 -206 -520 Z M -60 -454 Q 0 -468 60 -454 Q 54 -400 0 -394 Q -54 -400 -60 -454 Z" fill="${bl}" stroke="${C}" stroke-width="8" fill-rule="evenodd" stroke-linejoin="round"/>` +
+        [[-150, -400, -120, -240], [-90, -380, -70, -190], [90, -380, 70, -190], [150, -400, 120, -240], [0, -380, 4, -170]].map(([x1, y1, x2, y2]) => `<path d="M ${x1} ${y1} Q ${(x1 + x2) / 2 + 16} ${(y1 + y2) / 2} ${x2} ${y2}" stroke="#c9ccd4" stroke-width="7" fill="none" stroke-linecap="round"/>`).join(""));
+    }
+    // braços da frente (09/11/2026): cópia de cada braço por cima da cabeça, apagada; acende só nos gestos com "frente" (mão na testa)
+    const frente = {};
+    ["e", "d"].forEach(l => {
+      const w = grupo(tronco); w.setAttribute("opacity", "0"); const tmp = {}, mtmp = {};
+      fazerBracos({ c: grupo(w), f: grupo(w) }, tmp, mtmp, [l]);
+      Object.entries(tmp).forEach(([n, arr]) => { ossos[n] = ossos[n].concat(arr); });
+      const par = new Map(); Object.entries(maoV[l]).forEach(([nome, g]) => { if (!par.has(g)) par.set(g, [g]); });
+      Object.entries(mtmp[l]).forEach(([nome, g2]) => { const g = maoV[l][nome]; if (g && par.has(g) && !par.get(g).includes(g2)) par.get(g).push(g2); });
+      Object.keys(maoV[l]).forEach(nome => { maoV[l][nome] = par.get(maoV[l][nome]); });
+      frente[l] = { frente: w, tras: ossos[`braco_${l}`].slice(0, 2) };
+    });
     // preparar giros nas juntas (0,0 de cada osso)
     Object.values(ossos).flat().forEach(g => gsap.set(g, { svgOrigin: "0 0" }));
     gsap.set(cabeca, { svgOrigin: "0 0" });
-    return { ossos, camadas, maos: maoV };
+    return { ossos, camadas, maos: maoV, frente };
   }
 
   window.PessoaSVG = { construir, PELES };
